@@ -1,29 +1,3 @@
-from os import path
-import numpy as np
-import gym
-from gym.wrappers import Monitor
-
-import random
-import numpy as np
-from collections import deque
-
-ENVIRONMENT = 'LunarLander-v2'
-CHECKPOINT_DIRECTORY = './dqn/output/model/checkpoint'
-FIGURE_DIRECTORY = './dqn/output/summary.png'
-VIDEO_DIRECTORY = './dqn/output/video'
-EPISODES = 256
-STEPS = 1024
-MEMORY_SIZE = 1000000
-BATCH_SIZE = 64
-HIDDEN_NODES = 128
-HIDDEN_LAYERS = 2
-LEARNING_RATE = 1e-3
-GAMMA = 0.98
-EPSILON_MIN = 0.02
-EPSILON_DECAY = 0.98
-RENDER = True
-RECORD = False
-
 from keras import Sequential
 from keras.layers import Dense
 from keras.activations import relu, linear
@@ -55,6 +29,27 @@ class Model():
         )
         model.summary()
         return model
+
+ENVIRONMENT = 'LunarLander-v2'
+CHECKPOINT_DIRECTORY = './dqn/output/model/checkpoint'
+FIGURE_DIRECTORY = './dqn/output/summary.png'
+VIDEO_DIRECTORY = './dqn/output/video'
+EPISODES = 256
+STEPS = 1024
+MEMORY_SIZE = 1000000
+BATCH_SIZE = 64
+HIDDEN_NODES = 128
+HIDDEN_LAYERS = 2
+LEARNING_RATE = 1e-3
+GAMMA = 0.98
+EPSILON_MIN = 0.02
+EPSILON_DECAY = 0.98
+RENDER = True
+RECORD = True
+
+import random
+import numpy as np
+from collections import deque
 
 class Agent():
     """ Observes environment, selects actions and trains model. """
@@ -130,6 +125,11 @@ class Agent():
         """ Saves model weights. """
         self.model.save_weights(directory)
 
+from os import path
+import numpy as np
+import gym
+from gym.wrappers import Monitor
+
 def main():
     """ Orchestrates agent and environment interactions. """
     # Create environment
@@ -138,7 +138,7 @@ def main():
         environment = Monitor(
             env=environment,
             directory=VIDEO_DIRECTORY,
-            video_callable=lambda episode_id: True,
+            #video_callable=lambda episode_id: True,
             force=True
         )
     # Set random seeds
@@ -186,8 +186,6 @@ def main():
     environment.close()
     # Save model
     agent.save(CHECKPOINT_DIRECTORY)
-    # Display performance over time
-    #summary(rewards)
-
+    
 if __name__ == "__main__":
     main()
